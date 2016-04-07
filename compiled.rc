@@ -22,357 +22,553 @@ note_chat_messages = true
     OpenSkills()
   end
 >
-{
---Escapes the special characters in a string for pattern matching
-function escape(str)
-    --Escapes parens and dash "()-"
-    local escaped = str:gsub('[%(%)%-]','\\%1')
-    --Removes any coloration parts of the string
-    return (escaped:gsub('<[^<]*>',''))
-end
+:crawl.mpr('HDAForceMore started loading')
+#####################
+# Table of Contents #
+#####################
 
-function sendkeys(command)
-    crawl.flush_input()
-    crawl.sendkeys(command)
-    coroutine.yield(true)
-    crawl.flush_input()
-end
+# 1. Dungeon Features
+# 2. Failure
+# 3. Bad Things
+# 4. Translocations
+# 5. Expiring Effects
+# 6. Religion
+# 7. Hell Effects
+# 8. Monsters
 
-function should_rest(hp, mp, max_hp, max_mp)
-    local you_are_mummy = string.find(you.race(), "Mummy")
-    local you_are_deep_dwarf = string.find(you.race(), "Deep Dwarf")
-    return (mp < (max_mp*0.50) or ((max_mp-mp) > 20)
-        or ((hp < (max_hp*0.80)) or ((max_hp-hp) > 30)
-        and not you_are_deep_dwarf)
-        or you.slowed()
-        or you.poisoned()
-        or you.confused()
-        or you.exhausted()
-        or (((hp < max_hp) or (mp < max_mp)) and you_are_mummy))
-end
+# Set Alias
+more := force_more_message
 
--- Hungry, Very Hungry, Near Starving, Starving
-function you_are_hungry()
-    return not you_are_not_hungry() and ((string.find(you.hunger_name(), "hungry")) or you_are_starving_or_near())
-end
+####################
+# Dungeon Features #
+####################
 
--- Normal Satiation
-function you_are_not_hungry()
-    return (string.find(you.hunger_name(), "not hungry"))
-end
+# Abyssal Rune
+more += Found .* abyssal rune of Zot
 
--- Engorged
-function you_are_engorged()
-    return (string.find(you.hunger_name(), "completely stuffed"))
-end
+# Entrances, Exits, and Arrivals
+more += Found a frozen archway
+more += Found a gateway leading out of the Abyss
+more += Found a labyrinth entrance
+more += Found a staircase to the Ecumenical Temple
+more += The mighty Pandemonium lord.*resides here
 
--- Very full
-function you_are_very_full()
-    return (string.find(you.hunger_name(), "very full"))
-end
+# Portal Timers
+more += distant snort
+more += interdimensional caravan
+more += invites you to visit
+more += oppressive heat
+more += roar of battle
+more += sound of rushing water
+more += The drain falls to bits
+more += There is an entrance to a bailey on this level
+more += tolling of a bell
+more += wave of frost
+more += You hear the drain falling apart
+more += You hear.*crackle.*magical portal
+more += You hear.*crackling.*archway
+more += You hear.*creaking.*(oriflamme|portcullis)
+more += You hear.*hiss.*sand
+more += You hear.*rumble.*avalanche
+more += You hear.*rusting.*drain
+more += You hear.*ticking.*clock
 
--- Near Starving
-function you_are_near_starving()
-    return (string.find(you.hunger_name(), "near starving"))
-end
+# Traps
+more += (blundered into a|invokes the power of) Zot
+more += A huge blade swings out and slices into you
+stop += An alarm trap emits a blaring wail
+stop += found a zot trap
+stop += hear a soft click
+more += The power of Zot is invoked against you
+more += You (become entangled|are caught) in (a|the) (web|net)
+more += You fall through a shaft
+more += You stumble into the trap
 
--- Near Starving, Starving
-function you_are_starving_or_near()
-    return (string.find(you.hunger_name(), "starving"))
-end
+# Other
+more += Another plant grows acid sacs
+more += One of the plants suddenly grows acid sacs
+more += The walls and floor vibrate strangely for a moment
+more += You are suddenly pulled into a different region
+more += You have a vision of.*gates?
 
--- Starving
-function you_are_starving()
-    return you_are_starving_or_near() and not you_are_near_starving()
-end
+###########
+# Failure #
+###########
 
-function autoexplore()
-    sendkeys('o')
-end
+more += do not work when you're silenced
+more += sense of stasis
+more += Something interferes with your magic
+more += The rod doesn't have enough magic points
+more += The spell fizzles
+more += The writing blurs in front of your eyes
+more += The.*is unaffected
+more += This potion can/'t work under stasis
+more += This wand has no charges
+more += too hungry
+more += You are held in a net
+more += You are too injured to fight blindly
+more += You can't gag anything down
+more += You can't unwield
+more += You cannot cast spells when silenced
+more += You cannot cast spells while unable to breathe
+more += You cannot teleport right now
+more += You don't have any such object
+more += You don't have enough magic
+more += You don't.* that spell
+more += You fail to use your ability
+more += You have no appropriate body parts free
+more += You have no means to grasp a wand firmly enough
+more += You haven't enough magic at the moment
+more += You miscast
+more += Your amulet of stasis
+more += Your attempt to break free
+more += Your body armour is too heavy
 
-function have_barbs()
-    return string.find(crawl.messages(10), escape("The barbed spikes become lodged in your body"))
-        or string.find(crawl.messages(10), escape("The barbed spikes dig painfully into your body as you move"))
-end
+#############################
+# Bad and Unexpected Things #
+#############################
 
-function already_animated()
-    return string.find(crawl.messages(20), escape("Autocasting Animate Dead"))
-end
+# Bad things happening to you
+more += corrodes your equipment
+more += Your corrosive artefact corrodes you
+more += are blown away by the wind
+more += dispelling energy hits you
+more += infuriates you
+more += lose consciousness
+more += mark forms upon you
+more += MASSIVE DAMAGE
+more += Ouch! That really hurt!
+more += silver sears you
+more += Space bends around you
+more += Space warps horribly around you
+more += surroundings become eerily quiet
+more += Terrible wounds (open|spread) all over you
+more += The acid corrodes your
+more += The air around.*erupts in flames
+more += The air twists around and violently strikes you in flight
+more += You shudder from the earth-shattering force
+more += The arrow of dispersal hits you[^r]
+more += The barbed spikes become lodged in your body
+more += The barbed spikes dig painfully into your body as you move
+more += The blast of calcifying dust hits you[^r]
+more += The poison in your body grows stronger
+more += The pull of.*song draws you forwards
+more += The.*engulfs you in water
+more += The.*grabs you[^r]
+more += You (are|feel) drained
+more += You are (blasted|electrocuted)
+more += You are blown backwards
+more += You are burned terribly
+more += You are encased in ice
+more += You are engulfed in calcifying dust
+more += You are engulfed in dark miasma
+more += You are engulfed in mutagenic fog
+more += You are knocked back
+more += You are mesmerised
+more += You are slowing down
+more += You are trampled
+more += You convulse
+more += You feel a (horrible|terrible) chill
+more += You feel haunted
+more += You feel less vulnerable to poison
+more += You feel your attacks grow feeble
+more += You feel your flesh.*rot
+more += You feel your power drain away
+more += You feel your power leaking away
+more += You feel yourself grow more vulnerable to poison
+more += You stumble backwards
+more += You.*re (confused|more confused|too confused)
+more += You.*re (poisoned|more poisoned|lethally poisoned)
+more += Your body is wracked with pain
+more += Your damage is reflected back at you
+more += Your limbs are stiffening
+more += Your magical defenses are stripped away
+more += Your?.*suddenly stops? moving
 
-function removed_barbs()
-    return string.find(crawl.messages(10), escape("You carefully extract the manticore spikes from your body"))
-        or string.find(crawl.messages(10), escape("The manticore spikes snap loose"))
-end
+# Monsters doing bad things
+more += A tree reaches out and hits you!
+more += Agitated ravens fly out from beneath the
+more += begins to recite a word of recall
+more += Being near the torpor snail leaves you feeling lethargic
+more += blows on a signal horn
+more += cast banishment
+more += cast paralyse
+more += cast Torment
+more += goes berserk
+more += The moth of wrath goads something on
+more += is duplicated
+more += is no longer invulnerable
+more += Its appearance distorts for a moment
+more += Mara seems to draw the.*out of itself
+more += Mara shimmers
+more += Miasma billows from the
+more += shoots a curare
+more += stands defiantly in death's doorway
+more += steals.*your
+more += swoops through the air toward you
+more += The forest starts to sway and rumble
+more += The jumping spider pounces on you [^but]
+more += The octopode crusher throws you
+more += The shadow imp is revulsed by your support of nature
+more += The water nymph flows with the water
+more += The.*offers itself to Yredelemnul
+more += The.*seems to speed up
+more += The.*shudders
+more += There is a horrible\, sudden wrenching feeling in your soul
+more += Vines fly forth from the trees!
+more += You are hit by a branch
+more += You feel you are being watched by something
+more += Your magical defenses are stripped away
+more += \'s.*reflects
 
-function no_results()
-    return string.find(crawl.messages(10), escape("Can't find anything matching that"))
-        or string.find(crawl.messages(10), escape("You may need something to eat soon"))
-end
+# Unexpected situations
+more += A magical barricade bars your way
+more += Done waiting
+more += doors? slams? shut
+more += It doesn't seem very happy
+more += Mutagenic energies flood into your body
+more += Some monsters swap places
+more += (starving|devoid of blood)
+more += (The|Your).*falls away!
+more += The divine light dispels your darkness!
+more += The walls disappear
+more += There is a sealed passage
+more += You are wearing\:
+more += You can now
+more += You cannot afford.*fee
+more += You feel (dopey|clumsy|weak)
+more += You feel a genetic drift
+more += You feel monstrous
+more += You feel your rage building
+more += You have disarmed
+more += You have finished your manual
+more += You have reached level
+more += You need to eat something NOW
+more += You smell decay. (^Yuck!)
+more += You stop (a|de)scending the stairs
+more += You turn into a fleshy mushroom
+more += Your body shudders with the violent release of wild energies
+more += Your guardian golem overheats
+more += your magic stops regenerating
+more += Your scales start
+more += your.*devoured
+more += Your?.*can no longer
+more += Green shoots are pushing up through the earth
 
-function dont_know_how_to_get_there()
-    return string.find(crawl.messages(10), escape("know how to get there"))
-        or string.find(crawl.messages(10), escape("Have to go through"))
-end
+# Things getting better
+stop += contamination has completely
+more += You can move again
+more += You slip out of the net
+more += You.*and break free
+more += Your fit of retching subsides
+more += seems mollified
 
-function can_not_animate()
-    return string.find(crawl.messages(10), escape("There is nothing here that can be animated"))
-end
+# Ghouls
+: if you.race() == "Ghoul" then
+	stop += smell.*(rott(ing|en)|decay)
+	stop += something tasty in your inventory
+: end
 
-function can_not_bottle()
-    return string.find(crawl.messages(10), escape("There isn't anything to bottle here"))
-end
+##################
+# Translocations #
+##################
 
-function recently_mass_animated()
-    return string.find(crawl.messages(10), escape("Autocasting Mass Animate Remains"))
-end
+# Teleporting
+more += You blink
+more += You.*teleport [^f]
+more += You feel strangely (unstable|stable)
+more += You feel your translocation being delayed
+more += Your surroundings flicker
+more += Your surroundings seem slightly different
+more += Your surroundings suddenly seem different
+# -Tele
+more += You cannot blink right now
+more += You cannot teleport right now
+more += You feel.*firmly anchored in space
+more += You are no longer firmly anchored in space
+# -cTele
+more += You feel your control is inadequate
 
-function can_not_butcher()
-    return string.find(crawl.messages(10), escape("anything suitable to butcher here"))
-end
+####################
+# Expiring Effects #
+####################
 
-function can_not_eat_that()
-    return string.find(crawl.messages(10), escape("You can't eat that"))
-        --These strings don't seem to show up in messages
-        --or string.find(crawl.messages(10), escape("Not only inedible but also greatly harmful"))
-        --or string.find(crawl.messages(10), escape("It is caustic"))
-end
+# God Abilities
+# Divine Shield (The Shining One)
+Your divine shield starts to fade.
+Your divine shield fades away.
+# Jelly Prayer (Jiyva)
+Your prayer is over.
+# Mirror Damage (Yredelemnul)
+more += dark mirror aura disappears
 
-function rest()
-    sendkeys('5')
-end
+# Player Spells
+# Aura of Abjuration
+stop += Your aura of abjuration expires
+# Control Teleport
+stop += you feel uncertain
+# Death's Door
+more += time is quickly running out
+more += life is in your own
+# Enslavement
+more += is no longer charmed
+# Flight
+more += You are starting to lose your buoyancy
+stop += You lose control over your flight
+# Haste
+more += Your extra speed is starting to run out
+more += You feel yourself slow down
+# Invisibility
+more += You feel more conspicuous
+more += You flicker for a moment
+more += You flicker back
+# Ozocubu's Armour and Condensation Shield
+more += Your icy (shield|armour) evaporates
+more += Your.*(shield|armour) melts away
+# Phase Shift
+more += You feel closer to the material plane
+more += You are firmly grounded in the material plane once more
+# Repel/Deflect
+stop += missiles spell is about to expire
+more += You feel less protected from missiles
+# Shroud of Golubria
+stop += shroud begins to fray
+stop += shroud unravels
+more += Your shroud falls apart
+# Silence
+more += Your hearing returns
+# Swiftness
+stop += start to feel a little slower
+more += You feel sluggish
+# Transmutations
+more += Your transformation is almost over
+more += You have a feeling this form
+more += Your skin feels tender
+more += You feel yourself come back to life
 
-function you_are_gourmand()
-    return you.gourmand() or (not you_are_not_ghoul()) or (not you_are_not_felid()) or (not you_are_not_troll()) or (string.find(you.race(), "Kobold"))
-end
+# Other
+# Potion of Resistance
+more += You start to feel less resistant.
+more += Your resistance to elements expires
 
-function have_no_chunks()
-    for it in inventory() do
-        if string.find(it.name(), "chunk") then
-            return false
-        end
-    end
-    return true
-end
+############
+# Religion #
+############
 
-function have_rotten_chunks()
-    for it in inventory() do
-        if string.find(it.name(), "chunk") and string.find(it.name(), "rott") then
-            return false
-        end
-    end
-    return true
-end
+# Gifts or abilities are ready
+# Dithmenos
+more += You are shrouded in an aura of darkness
+more += You now sometimes bleed smoke
+more += You.*no longer.*bleed smoke
+more += Your shadow no longer tangibly mimics your actions
+more += Your shadow now sometimes tangibly mimics your actions
+# Gozag
+more += will now duplicate a non-artefact item
+# Jiyva
+more += will now unseal the treasures of the Slime Pits
+# Kikubaaqudgha
+more += Kikubaaqudgha will now enhance your necromancy
+# Lugonu
+more += Lugonu will now corrupt your weapon
+# Qazlal
+more += resistances upon receiving elemental damage
+more += You are surrounded by a storm which can block enemy attacks
+# Ru
+more += you are ready to make a new sacrifice
+# Sif Muna
+more += Sif Muna is protecting you from the effects of miscast magic
+# The Shining One
+more += The Shining One will now bless
+# Zin
+more += will now cure all your mutations
+# You Screwed Up
+more += is no longer ready
 
-function number_of_chunks()
-    for it in inventory() do
-        --if string.find(it.name(), "chunk") then
-        --crawl.mpr(it.name() .." is edible: " .. (food.can_eat(it) and "True" or "False") .. " and dangerous: " .. (food.dangerous(it) and "True" or "False"))
-        --end
-        if string.find(it.name(), "chunk") and (not string.find(it.name(), "book")) and food.can_eat(it) and not food.dangerous(it) then
-            return it.quantity
-        end
-    end
-    return 0
-end
+# Poor Decisions
+more += You really shouldn't be using
 
-function is_in_inventory(str)
-    for it in inventory() do
-        if string.find(it.name(), str) then
-            return true
-        end
-    end
-    return false
-end
+# Wrath
+more += Nemelex gives you another card to finish dealing
+more += Fedhas invokes the elements against you
+more += Lugonu sends minions to punish you
+more += Okawaru sends forces against you
+more += wrath finds you
 
-function weapon_in_inventory()
-    for it in inventory() do
-        if string.find(it.class(true), "weapon") then
-            return true
-        end
-    end
-    return false
-end
+# Xom Effects
+more += staircase.*moves
+more += is too large for the net to hold
 
-function weapon_in_slot_a()
-    local it = items.inslot(0)
-    if it then
-        return string.find(it.class(true), "weapon")
-    else
-        return false
-    end
-end
+# Other
+more += Jiyva alters your body
+: if you.god() == "Xom" then
+	more += god:
+: end
 
-function find_item_letter(str)
-    for i = 0,51 do
-        it = items.inslot(i)
-        if it then
-            if string.find(it.name(), str) then
-                return items.index_to_letter(i)
-            end
-        end
-    end
-    return false
-end
+: if not string.find(you.god(), "Jiyva") then
+  more += splits in two
+:end
 
-function you_worship_sacrifice_god()
-    return string.find(you.god(), "Trog")
-        --or string.find(you.god(), "Oka")
-        --or string.find(you.god(), "Makhleb")
-        or string.find(you.god(), "Beogh")
-        or string.find(you.god(), "Lugonu")
-        --or string.find(you.god(), "Nemelex")
-end
+################
+# Hell Effects #
+################
 
-function on_corpses()
-    local fl = you.floor_items()
-    for it in iter.invent_iterator:new(fl) do
-        if string.find(it.name(), "corpse")
-            and not string.find(it.name(), "rotting")
-            and not string.find(it.name(), "plague") then
-            return true
-        end
-    end
-    return false
-end
+more += A gut-wrenching scream fills the air
+more += Brimstone rains from above
+more += Die\, mortal
+more += Leave now\, before it is too late
+more += Something frightening happens
+more += Trespassers are not welcome here
+more += We do not forgive those who trespass against us
+more += We have you now
+more += You do not belong in this place
+more += You feel a terrible foreboding
+more += You feel lost and a long\, long way from home
+more += You hear diabolical laughter
+more += You hear words spoken in a strange and terrible language
+more += You sense a hostile presence
+more += You sense an ancient evil watching you
+more += You shiver with fear
+more += You smell brimstone
+more += You suddenly feel all small and vulnerable
+more += You will not leave this place
 
-function on_chunks()
-    for it in floor_items() do
-        if string.find(it.name(), "chunk") then
-            return true
-        else
-            return false
-        end
-    end
-end
+############
+# Monsters #
+############
 
-function you_are_carnivore()
-    return you.saprovorous()
-end
+# Arriving Unexpectedly
+more += appears in a shower of sparks
+more += appears out of thin air
+more += comes (up|down) the stairs
+more += Something appears in a flash of light
+more += The.*is a mimic
+more += You sense the presence of something unfriendly
+more += The.*answers the.*call
+more += Wisps of shadow swirl around
+more += Shadows whirl around
 
-function you_are_not_ghoul()
-    return not (string.find(you.race(), "Ghoul"))
-end
+# Item Use
+more += drinks a potion
+more += evokes.*(amulet|ring)
+more += reads a scroll
+more += zaps a (wand|rod)
 
-function you_are_not_troll()
-    return not (string.find(you.race(), "Troll"))
-end
+# Terrible Monsters
+more += 's ghost.*(comes? into view|opens the)
+more += A player ghost.*(comes? into view|opens the)
+more += boggarts?.*(comes? into view|opens the)
+more += curse skull.*comes? into view
+more += fiend.*(comes? into view|opens the)
+more += flayed ghost.*(comes? into view|opens the)
+more += giant eyeball.*comes? into view
+more += giant orange brains?.*(comes? into view|opens the)
+more += giant spore.*comes? into view
+more += hellion.*(comes? into view|opens the)
+more += ironbrand convoker.*(comes? into view|opens the)
+more += Lich.*(comes? into view|opens the)
+more += orange crystal statue.*comes? into view
+more += shadow demons?.*(comes? into view|opens the)
+more += silver statue.*comes? into view
+more += tormentor.*(comes? into view|opens the)
 
-function you_are_not_felid()
-    return not (string.find(you.race(), "Felid"))
-end
+# Uniques
+more += 27-headed.*(comes? into view|opens the)
+more += Agnes.*(comes? into view|opens the)
+more += Aizul.*(comes? into view|opens the)
+more += Antaeus.*(comes? into view|opens the)
+more += Arachne.*(comes? into view|opens the)
+more += Asmodeus.*(comes? into view|opens the)
+more += Asterion.*(comes? into view|opens the)
+more += Azrael.*(comes? into view|opens the)
+more += Blork the orc.*(comes? into view|opens the)
+more += Boris.*(comes? into view|opens the)
+more += Cerebov.*(comes? into view|opens the)
+more += Crazy Yiuf.*(comes? into view|opens the)
+more += Dispater.*(comes? into view|opens the)
+more += Dissolution.*(comes? into view|opens the)
+more += Donald.*(comes? into view|opens the)
+more += Dowan.*(comes? into view|opens the)
+more += Duvessa.*(comes? into view|opens the)
+more += Edmund.*(comes? into view|opens the)
+more += Ereshkigal.*(comes? into view|opens the)
+more += Erica.*(comes? into view|opens the)
+more += Erolcha.*(comes? into view|opens the)
+more += Eustachio.*(comes? into view|opens the)
+more += Fannar.*(comes? into view|opens the)
+more += Frances.*(comes? into view|opens the)
+more += Francis.*(comes? into view|opens the)
+more += Frederick.*(comes? into view|opens the)
+more += Gastronok.*(comes? into view|opens the)
+more += Geryon.*(comes? into view|opens the)
+more += Gloorx Vloq.*(comes? into view|opens the)
+more += Grinder.*(comes? into view|opens the)
+more += Grum.*(comes? into view|opens the)
+more += Harold.*(comes? into view|opens the)
+more += Ignacio.*(comes? into view|opens the)
+more += Ijyb.*(comes? into view|opens the)
+more += Ilsuiw.*(comes? into view|opens the)
+more += Jessica.*(comes? into view|opens the)
+more += Jorgrun.*(comes? into view|opens the)
+more += Jory.*(comes? into view|opens the)
+more += Joseph.*(comes? into view|opens the)
+more += Josephine.*(comes? into view|opens the)
+more += Jozef.*(comes? into view|opens the)
+more += Khufu.*(comes? into view|opens the)
+more += Kirke.*(comes? into view|opens the)
+more += Lamia.*(comes? into view|opens the)
+more += Lom Lobon.*(comes? into view|opens the)
+more += Louise.*(comes? into view|opens the)
+more += Mara.*(comes? into view|opens the)
+more += Margery.*(comes? into view|opens the)
+more += Maud.*(comes? into view|opens the)
+more += Maurice.*(comes? into view|opens the)
+more += Menkaure.*(comes? into view|opens the)
+more += Mennas.*(comes? into view|opens the)
+more += Mnoleg.*(comes? into view|opens the)
+more += Murray.*(comes? into view|opens the)
+more += Natasha.*(comes? into view|opens the)
+more += Nergalle.*(comes? into view|opens the)
+more += Nessos.*(comes? into view|opens the)
+more += Nikola.*(comes? into view|opens the)
+more += Norris.*(comes? into view|opens the)
+more += Pikel.*(comes? into view|opens the)
+more += Polyphemus.*(comes? into view|opens the)
+more += Prince Ribbit.*(comes? into view|opens the)
+more += Psyche.*(comes? into view|opens the)
+more += Purgy.*(comes? into view|opens the)
+more += Roxanne.*(comes? into view|opens the)
+more += Rupert.*(comes? into view|opens the)
+more += Saint Roka.*(comes? into view|opens the)
+more += Sigmund.*(comes? into view|opens the)
+more += Snorg.*(comes? into view|opens the)
+more += Sojobo.*(comes? into view|opens the)
+more += Sonja.*(comes? into view|opens the)
+more += Terence.*(comes? into view|opens the)
+more += The Lernaean hydra.*(comes? into view|opens the)
+more += The royal jelly.*(comes? into view|opens the)
+more += The Serpent of Hell.*(comes? into view|opens the)
+more += Tiamat.*(comes? into view|opens the)
+more += Urug.*(comes? into view|opens the)
+more += Vashnia.*(comes? into view|opens the)
+more += Wiglaf.*(comes? into view|opens the)
+more += Xtahua.*(comes? into view|opens the)
 
-function you_are_not_octopode()
-    return not (string.find(you.race(), "Octopode"))
-end
+:crawl.mpr('HDAForceMore loaded')
+:crawl.mpr('HDATravelPre started loading')
 
-function find_corpses()
-    local race = you.race()
-    local god = you.god()
-    local exclude_this = ""
-    if string.find(god, "Shining") then
-        exlude_this = race
-    end
-    sendkeys(string.char(6) .. "@corpse&&!!rott&&!!skel&&!!sky&&!!necrop&&!!ugly&&!!vampire&&!!corpse rot&&!!&&!!botono" .. exclude_this .. "\ra\r")
-end
+confirm_butcher = never
+easy_eat_chunks = true
+auto_eat_chunks = true
+auto_drop_chunks = yes
+easy_eat_contaminated = true
 
-function inventory()
-    return iter.invent_iterator:new(items.inventory())
-end
+autoinscribe += bread ration:@e1
+autoinscribe += meat ration:@e2
+autoinscribe += chunk:@w0
+autoinscribe += staff of energy:@w1
 
-function floor_items()
-    return iter.invent_iterator:new(you.floor_items())
-end
-
-function no_weapon()
-    return (items.equipped_at("Weapon") == nil) and not uses_unarmed()
-end
-
-function uses_unarmed()
-    return not you_are_not_ghoul()
-        or not you_are_not_troll()
-        or not you_are_not_felid()
-        or (you.skill("Unarmed Combat") >= 3)
-end
-
-function is_weapon(str)
-    local weapon =  items.equipped_at("Weapon")
-    if weapon then
-        return string.find(weapon.name(), str)
-    else
-        return false
-    end
-end
-
-function is_ring(str)
-    local ring1 = items.equipped_at("Left Ring")
-    local ring2 = items.equipped_at("Right Ring")
-    if ring1 and ring2 then
-        return string.find(ring1.name(), str) or string.find(ring2.name(), str)
-    elseif ring1 then
-        return string.find(ring1.name(), str)
-    elseif ring2 then
-        return string.find(ring2.name(), str)
-    else
-        return false
-    end
-end
-
-
--- Returns a table where the key is the monster description and value is the total number of that mob in your vision
-function getMonsterList()
-    local monsters = {}
-    for x = -7,7 do
-        for y = -7,7 do
-            m = monster.get_monster_at(x, y)
-            local attitude_hostile = 0
-            if m and (m:attitude() == attitude_hostile) and not (m:is_firewood()) then
-                desc = m:desc()
-                if (monsters[desc] == nil) then
-                    monsters[desc] = 1
-                else
-                    monsters[desc] = monsters[desc] + 1
-                end
-            end
-        end
-    end
-    return monsters
-end
-
-function item_in_view(str)
-    local x,y
-    for x = -8,8 do
-        for y = -8,8 do
-            if not (x == 0 and y == 0) then
-                local pile = items.get_items_at(x,y)
-                if pile ~= nil then
-                    for it in iter.invent_iterator:new(pile) do
-                        if string.find(it.name(), str) and you.see_cell_no_trans(x,y) then
-                            return true
-                        end
-                    end
-                end
-            end
-        end
-    end
-    return false
-end
-
-local function init_spells()
-    local spell_list = {}
-
-    for _, spell_name in ipairs(you.spells()) do
-        spell_list[spell_name] = true
-    end
-
-    return spell_list
-end
-
-known_spells = init_spells()
-crawl.mpr('Helpers loaded')
-}
-<
-crawl.mpr('Starting to load HDAMessageColors')
->
+:crawl.mpr('HDAtravelPre loaded')
+:crawl.mpr('HDAMessageColors started to load')
 ####################
 # Message coloring #
 ####################
@@ -382,6 +578,7 @@ crawl.mpr('Starting to load HDAMessageColors')
 # lightgrey, lightmagenta, lightred, magenta, red, yellow, white
 
 # Variables for message highlighting
+
 $danger   := lightred
 $item_dmg := red
 $warning  := yellow
@@ -3072,12 +3269,9 @@ msc += boring:trembles before you
 msc += boring:You feel mildly nauseous
 msc += boring:Multicoloured lights dance around
 
-<
-crawl.mpr('HDAMessageColors loaded')
->
-<
-crawl.mpr('Starting to load HDAItemColors')
->
+:crawl.mpr('HDAMessageColors loaded')
+:crawl.mpr('Starting to load HDAItemColors')
+
 #########################
 # Aliases and Variables #
 #########################
@@ -3219,10 +3413,356 @@ menu += $awesome:.*misc.*rune( of Zot)?
 menu += $awesome:.*orb.*Zot
 menu += $awesome:manual
 
-<
-crawl.mpr('HDAItemColors loaded')
->
+:crawl.mpr('HDAItemColors loaded')
 {
+--Escapes the special characters in a string for pattern matching
+function escape(str)
+    --Escapes parens and dash "()-"
+    local escaped = str:gsub('[%(%)%-]','\\%1')
+    --Removes any coloration parts of the string
+    return (escaped:gsub('<[^<]*>',''))
+end
+
+function sendkeys(command)
+    crawl.flush_input()
+    crawl.sendkeys(command)
+    coroutine.yield(true)
+    crawl.flush_input()
+end
+
+function should_rest(hp, mp, max_hp, max_mp)
+    local you_are_mummy = string.find(you.race(), "Mummy")
+    local you_are_deep_dwarf = string.find(you.race(), "Deep Dwarf")
+    --return (mp < (max_mp*0.50) or ((max_mp-mp) > 20)
+        --or ((hp < (max_hp*0.80)) or ((max_hp-hp) > 30)
+    return (mp < max_mp
+        or (hp < max_hp
+        and not you_are_deep_dwarf)
+        or you.slowed()
+        or you.poisoned()
+        or you.confused()
+        or you.exhausted()
+        or (((hp < max_hp) or (mp < max_mp)) and you_are_mummy))
+end
+
+-- Hungry, Very Hungry, Near Starving, Starving
+function you_are_hungry()
+    return not you_are_not_hungry() and ((string.find(you.hunger_name(), "hungry")) or you_are_starving_or_near())
+end
+
+-- Normal Satiation
+function you_are_not_hungry()
+    return (string.find(you.hunger_name(), "not hungry"))
+end
+
+-- Engorged
+function you_are_engorged()
+    return (string.find(you.hunger_name(), "completely stuffed"))
+end
+
+-- Very full
+function you_are_very_full()
+    return (string.find(you.hunger_name(), "very full"))
+end
+
+-- Near Starving
+function you_are_near_starving()
+    return (string.find(you.hunger_name(), "near starving"))
+end
+
+-- Near Starving, Starving
+function you_are_starving_or_near()
+    return (string.find(you.hunger_name(), "starving"))
+end
+
+-- Starving
+function you_are_starving()
+    return you_are_starving_or_near() and not you_are_near_starving()
+end
+
+function autoexplore()
+    sendkeys('o')
+end
+
+function have_barbs()
+    return string.find(crawl.messages(10), escape("The barbed spikes become lodged in your body"))
+        or string.find(crawl.messages(10), escape("The barbed spikes dig painfully into your body as you move"))
+end
+
+function already_animated()
+    return string.find(crawl.messages(20), escape("Autocasting Animate Dead"))
+end
+
+function removed_barbs()
+    return string.find(crawl.messages(10), escape("You carefully extract the manticore spikes from your body"))
+        or string.find(crawl.messages(10), escape("The manticore spikes snap loose"))
+end
+
+function no_results()
+    return string.find(crawl.messages(10), escape("Can't find anything matching that"))
+        or string.find(crawl.messages(10), escape("You may need something to eat soon"))
+end
+
+function dont_know_how_to_get_there()
+    return string.find(crawl.messages(10), escape("know how to get there"))
+        or string.find(crawl.messages(10), escape("Have to go through"))
+end
+
+function can_not_animate()
+    return string.find(crawl.messages(10), escape("There is nothing here that can be animated"))
+end
+
+function can_not_bottle()
+    return string.find(crawl.messages(10), escape("There isn't anything to bottle here"))
+end
+
+function recently_mass_animated()
+    return string.find(crawl.messages(10), escape("Autocasting Mass Animate Remains"))
+end
+
+function can_not_butcher()
+    return string.find(crawl.messages(10), escape("anything suitable to butcher here"))
+end
+
+function can_not_eat_that()
+    return string.find(crawl.messages(10), escape("You can't eat that"))
+        --These strings don't seem to show up in messages
+        --or string.find(crawl.messages(10), escape("Not only inedible but also greatly harmful"))
+        --or string.find(crawl.messages(10), escape("It is caustic"))
+end
+
+function rest()
+    sendkeys('5')
+end
+
+function you_are_gourmand()
+    return you.gourmand() or (not you_are_not_ghoul()) or (not you_are_not_felid()) or (not you_are_not_troll()) or (string.find(you.race(), "Kobold"))
+end
+
+function have_no_chunks()
+    for it in inventory() do
+        if string.find(it.name(), "chunk") then
+            return false
+        end
+    end
+    return true
+end
+
+function have_rotten_chunks()
+    for it in inventory() do
+        if string.find(it.name(), "chunk") and string.find(it.name(), "rott") then
+            return false
+        end
+    end
+    return true
+end
+
+function number_of_chunks()
+    for it in inventory() do
+        --if string.find(it.name(), "chunk") then
+        --crawl.mpr(it.name() .." is edible: " .. (food.can_eat(it) and "True" or "False") .. " and dangerous: " .. (food.dangerous(it) and "True" or "False"))
+        --end
+        if string.find(it.name(), "chunk") and (not string.find(it.name(), "book")) and food.can_eat(it) and not food.dangerous(it) then
+            return it.quantity
+        end
+    end
+    return 0
+end
+
+function is_in_inventory(str)
+    for it in inventory() do
+        if string.find(it.name(), str) then
+            return true
+        end
+    end
+    return false
+end
+
+function weapon_in_inventory()
+    for it in inventory() do
+        if string.find(it.class(true), "weapon") then
+            return true
+        end
+    end
+    return false
+end
+
+function weapon_in_slot_a()
+    local it = items.inslot(0)
+    if it then
+        return string.find(it.class(true), "weapon")
+    else
+        return false
+    end
+end
+
+function find_item_letter(str)
+    for i = 0,51 do
+        it = items.inslot(i)
+        if it then
+            if string.find(it.name(), str) then
+                return items.index_to_letter(i)
+            end
+        end
+    end
+    return false
+end
+
+function you_worship_sacrifice_god()
+    return string.find(you.god(), "Trog")
+        --or string.find(you.god(), "Oka")
+        --or string.find(you.god(), "Makhleb")
+        or string.find(you.god(), "Beogh")
+        or string.find(you.god(), "Lugonu")
+        --or string.find(you.god(), "Nemelex")
+end
+
+function on_corpses()
+    local fl = you.floor_items()
+    for it in iter.invent_iterator:new(fl) do
+        if string.find(it.name(), "corpse")
+            and not string.find(it.name(), "rotting")
+            and not string.find(it.name(), "plague") then
+            return true
+        end
+    end
+    return false
+end
+
+function on_chunks()
+    for it in floor_items() do
+        if string.find(it.name(), "chunk") then
+            return true
+        else
+            return false
+        end
+    end
+end
+
+function you_are_carnivore()
+    return you.saprovorous()
+end
+
+function you_are_not_ghoul()
+    return not (string.find(you.race(), "Ghoul"))
+end
+
+function you_are_not_troll()
+    return not (string.find(you.race(), "Troll"))
+end
+
+function you_are_not_felid()
+    return not (string.find(you.race(), "Felid"))
+end
+
+function you_are_not_octopode()
+    return not (string.find(you.race(), "Octopode"))
+end
+
+function find_corpses()
+    local race = you.race()
+    local god = you.god()
+    local exclude_this = ""
+    if string.find(god, "Shining") then
+        exlude_this = race
+    end
+    sendkeys(string.char(6) .. "@corpse&&!!rott&&!!skel&&!!sky&&!!necrop&&!!ugly&&!!vampire&&!!corpse rot&&!!&&!!botono" .. exclude_this .. "\ra\r")
+end
+
+function inventory()
+    return iter.invent_iterator:new(items.inventory())
+end
+
+function floor_items()
+    return iter.invent_iterator:new(you.floor_items())
+end
+
+function no_weapon()
+    return (items.equipped_at("Weapon") == nil) and not uses_unarmed()
+end
+
+function uses_unarmed()
+    return not you_are_not_ghoul()
+        or not you_are_not_troll()
+        or not you_are_not_felid()
+        or (you.skill("Unarmed Combat") >= 3)
+end
+
+function is_weapon(str)
+    local weapon =  items.equipped_at("Weapon")
+    if weapon then
+        return string.find(weapon.name(), str)
+    else
+        return false
+    end
+end
+
+function is_ring(str)
+    local ring1 = items.equipped_at("Left Ring")
+    local ring2 = items.equipped_at("Right Ring")
+    if ring1 and ring2 then
+        return string.find(ring1.name(), str) or string.find(ring2.name(), str)
+    elseif ring1 then
+        return string.find(ring1.name(), str)
+    elseif ring2 then
+        return string.find(ring2.name(), str)
+    else
+        return false
+    end
+end
+
+
+-- Returns a table where the key is the monster description and value is the total number of that mob in your vision
+function getMonsterList()
+    local monsters = {}
+    for x = -7,7 do
+        for y = -7,7 do
+            m = monster.get_monster_at(x, y)
+            local attitude_hostile = 0
+            if m and (m:attitude() == attitude_hostile) and not (m:is_firewood()) then
+                desc = m:desc()
+                if (monsters[desc] == nil) then
+                    monsters[desc] = 1
+                else
+                    monsters[desc] = monsters[desc] + 1
+                end
+            end
+        end
+    end
+    return monsters
+end
+
+function item_in_view(str)
+    local x,y
+    for x = -8,8 do
+        for y = -8,8 do
+            if not (x == 0 and y == 0) then
+                local pile = items.get_items_at(x,y)
+                if pile ~= nil then
+                    for it in iter.invent_iterator:new(pile) do
+                        if string.find(it.name(), str) and you.see_cell_no_trans(x,y) then
+                            return true
+                        end
+                    end
+                end
+            end
+        end
+    end
+    return false
+end
+
+local function init_spells()
+    local spell_list = {}
+
+    for _, spell_name in ipairs(you.spells()) do
+        spell_list[spell_name] = true
+    end
+
+    return spell_list
+end
+
+known_spells = init_spells()
+crawl.mpr('Helpers loaded')
 -- Uses the getMonsterList and escape functions above
 function SpoilerAlert()
     local mobwarnings = {}
@@ -3978,8 +4518,6 @@ function SpoilerAlert()
     end
 end
 crawl.mpr('SpoilerAlerts loaded')
-}
-{
 local previous_hp = 0
 local previous_mp = 0
 local previous_form = ""
@@ -4112,561 +4650,6 @@ function AnnounceDamage()
     was_berserk_last_turn = you_are_berserk
 end
 crawl.mpr('HDamage loaded')
-}
-<
-crawl.mpr('HDAForceMore started loading')
->
-#####################
-# Table of Contents #
-#####################
-
-# 1. Dungeon Features
-# 2. Failure
-# 3. Bad Things
-# 4. Translocations
-# 5. Expiring Effects
-# 6. Religion
-# 7. Hell Effects
-# 8. Monsters
-
-# Set Alias
-more := force_more_message
-
-####################
-# Dungeon Features #
-####################
-
-# Abyssal Rune
-more += Found .* abyssal rune of Zot
-
-# Entrances, Exits, and Arrivals
-more += Found a frozen archway
-more += Found a gateway leading out of the Abyss
-more += Found a labyrinth entrance
-more += Found a staircase to the Ecumenical Temple
-more += The mighty Pandemonium lord.*resides here
-
-# Portal Timers
-more += distant snort
-more += interdimensional caravan
-more += invites you to visit
-more += oppressive heat
-more += roar of battle
-more += sound of rushing water
-more += The drain falls to bits
-more += There is an entrance to a bailey on this level
-more += tolling of a bell
-more += wave of frost
-more += You hear the drain falling apart
-more += You hear.*crackle.*magical portal
-more += You hear.*crackling.*archway
-more += You hear.*creaking.*(oriflamme|portcullis)
-more += You hear.*hiss.*sand
-more += You hear.*rumble.*avalanche
-more += You hear.*rusting.*drain
-more += You hear.*ticking.*clock
-
-# Traps
-more += (blundered into a|invokes the power of) Zot
-more += A huge blade swings out and slices into you
-stop += An alarm trap emits a blaring wail
-stop += found a zot trap
-stop += hear a soft click
-more += The power of Zot is invoked against you
-more += You (become entangled|are caught) in (a|the) (web|net)
-more += You fall through a shaft
-more += You stumble into the trap
-
-# Other
-more += Another plant grows acid sacs
-more += One of the plants suddenly grows acid sacs
-more += The walls and floor vibrate strangely for a moment
-more += You are suddenly pulled into a different region
-more += You have a vision of.*gates?
-
-###########
-# Failure #
-###########
-
-more += do not work when you're silenced
-more += sense of stasis
-more += Something interferes with your magic
-more += The rod doesn't have enough magic points
-more += The spell fizzles
-more += The writing blurs in front of your eyes
-more += The.*is unaffected
-more += This potion can/'t work under stasis
-more += This wand has no charges
-more += too hungry
-more += You are held in a net
-more += You are too injured to fight blindly
-more += You can't gag anything down
-more += You can't unwield
-more += You cannot cast spells when silenced
-more += You cannot cast spells while unable to breathe
-more += You cannot teleport right now
-more += You don't have any such object
-more += You don't have enough magic
-more += You don't.* that spell
-more += You fail to use your ability
-more += You have no appropriate body parts free
-more += You have no means to grasp a wand firmly enough
-more += You haven't enough magic at the moment
-more += You miscast
-more += Your amulet of stasis
-more += Your attempt to break free
-more += Your body armour is too heavy
-
-#############################
-# Bad and Unexpected Things #
-#############################
-
-# Bad things happening to you
-more += corrodes your equipment
-more += Your corrosive artefact corrodes you
-more += are blown away by the wind
-more += dispelling energy hits you
-more += infuriates you
-more += lose consciousness
-more += mark forms upon you
-more += MASSIVE DAMAGE
-more += Ouch! That really hurt!
-more += silver sears you
-more += Space bends around you
-more += Space warps horribly around you
-more += surroundings become eerily quiet
-more += Terrible wounds (open|spread) all over you
-more += The acid corrodes your
-more += The air around.*erupts in flames
-more += The air twists around and violently strikes you in flight
-more += You shudder from the earth-shattering force
-more += The arrow of dispersal hits you[^r]
-more += The barbed spikes become lodged in your body
-more += The barbed spikes dig painfully into your body as you move
-more += The blast of calcifying dust hits you[^r]
-more += The poison in your body grows stronger
-more += The pull of.*song draws you forwards
-more += The.*engulfs you in water
-more += The.*grabs you[^r]
-more += You (are|feel) drained
-more += You are (blasted|electrocuted)
-more += You are blown backwards
-more += You are burned terribly
-more += You are encased in ice
-more += You are engulfed in calcifying dust
-more += You are engulfed in dark miasma
-more += You are engulfed in mutagenic fog
-more += You are knocked back
-more += You are mesmerised
-more += You are slowing down
-more += You are trampled
-more += You convulse
-more += You feel a (horrible|terrible) chill
-more += You feel haunted
-more += You feel less vulnerable to poison
-more += You feel your attacks grow feeble
-more += You feel your flesh.*rot
-more += You feel your power drain away
-more += You feel your power leaking away
-more += You feel yourself grow more vulnerable to poison
-more += You stumble backwards
-more += You.*re (confused|more confused|too confused)
-more += You.*re (poisoned|more poisoned|lethally poisoned)
-more += Your body is wracked with pain
-more += Your damage is reflected back at you
-more += Your limbs are stiffening
-more += Your magical defenses are stripped away
-more += Your?.*suddenly stops? moving
-
-# Monsters doing bad things
-more += A tree reaches out and hits you!
-more += Agitated ravens fly out from beneath the
-more += begins to recite a word of recall
-more += Being near the torpor snail leaves you feeling lethargic
-more += blows on a signal horn
-more += cast banishment
-more += cast paralyse
-more += cast Torment
-more += goes berserk
-more += The moth of wrath goads something on
-more += is duplicated
-more += is no longer invulnerable
-more += Its appearance distorts for a moment
-more += Mara seems to draw the.*out of itself
-more += Mara shimmers
-more += Miasma billows from the
-more += shoots a curare
-more += stands defiantly in death's doorway
-more += steals.*your
-more += swoops through the air toward you
-more += The forest starts to sway and rumble
-more += The jumping spider pounces on you [^but]
-more += The octopode crusher throws you
-more += The shadow imp is revulsed by your support of nature
-more += The water nymph flows with the water
-more += The.*offers itself to Yredelemnul
-more += The.*seems to speed up
-more += The.*shudders
-more += There is a horrible\, sudden wrenching feeling in your soul
-more += Vines fly forth from the trees!
-more += You are hit by a branch
-more += You feel you are being watched by something
-more += Your magical defenses are stripped away
-more += \'s.*reflects
-
-# Unexpected situations
-more += A magical barricade bars your way
-more += Done waiting
-more += doors? slams? shut
-more += It doesn't seem very happy
-more += Mutagenic energies flood into your body
-more += Some monsters swap places
-more += (starving|devoid of blood)
-more += (The|Your).*falls away!
-more += The divine light dispels your darkness!
-more += The walls disappear
-more += There is a sealed passage
-more += You are wearing\:
-more += You can now
-more += You cannot afford.*fee
-more += You feel (dopey|clumsy|weak)
-more += You feel a genetic drift
-more += You feel monstrous
-more += You feel your rage building
-more += You have disarmed
-more += You have finished your manual
-more += You have reached level
-more += You need to eat something NOW
-more += You smell decay. (^Yuck!)
-more += You stop (a|de)scending the stairs
-more += You turn into a fleshy mushroom
-more += Your body shudders with the violent release of wild energies
-more += Your guardian golem overheats
-more += your magic stops regenerating
-more += Your scales start
-more += your.*devoured
-more += Your?.*can no longer
-more += Green shoots are pushing up through the earth
-
-# Things getting better
-stop += contamination has completely
-more += You can move again
-more += You slip out of the net
-more += You.*and break free
-more += Your fit of retching subsides
-more += seems mollified
-
-# Ghouls
-: if you.race() == "Ghoul" then
-	stop += smell.*(rott(ing|en)|decay)
-	stop += something tasty in your inventory
-: end
-
-##################
-# Translocations #
-##################
-
-# Teleporting
-more += You blink
-more += You.*teleport [^f]
-more += You feel strangely (unstable|stable)
-more += You feel your translocation being delayed
-more += Your surroundings flicker
-more += Your surroundings seem slightly different
-more += Your surroundings suddenly seem different
-# -Tele
-more += You cannot blink right now
-more += You cannot teleport right now
-more += You feel.*firmly anchored in space
-more += You are no longer firmly anchored in space
-# -cTele
-more += You feel your control is inadequate
-
-####################
-# Expiring Effects #
-####################
-
-# God Abilities
-# Divine Shield (The Shining One)
-Your divine shield starts to fade.
-Your divine shield fades away.
-# Jelly Prayer (Jiyva)
-Your prayer is over.
-# Mirror Damage (Yredelemnul)
-more += dark mirror aura disappears
-
-# Player Spells
-# Aura of Abjuration
-stop += Your aura of abjuration expires
-# Control Teleport
-stop += you feel uncertain
-# Death's Door
-more += time is quickly running out
-more += life is in your own
-# Enslavement
-more += is no longer charmed
-# Flight
-more += You are starting to lose your buoyancy
-stop += You lose control over your flight
-# Haste
-more += Your extra speed is starting to run out
-more += You feel yourself slow down
-# Invisibility
-more += You feel more conspicuous
-more += You flicker for a moment
-more += You flicker back
-# Ozocubu's Armour and Condensation Shield
-more += Your icy (shield|armour) evaporates
-more += Your.*(shield|armour) melts away
-# Phase Shift
-more += You feel closer to the material plane
-more += You are firmly grounded in the material plane once more
-# Repel/Deflect
-stop += missiles spell is about to expire
-more += You feel less protected from missiles
-# Shroud of Golubria
-stop += shroud begins to fray
-stop += shroud unravels
-more += Your shroud falls apart
-# Silence
-more += Your hearing returns
-# Swiftness
-stop += start to feel a little slower
-more += You feel sluggish
-# Transmutations
-more += Your transformation is almost over
-more += You have a feeling this form
-more += Your skin feels tender
-more += You feel yourself come back to life
-
-# Other
-# Potion of Resistance
-more += You start to feel less resistant.
-more += Your resistance to elements expires
-
-############
-# Religion #
-############
-
-# Gifts or abilities are ready
-# Dithmenos
-more += You are shrouded in an aura of darkness
-more += You now sometimes bleed smoke
-more += You.*no longer.*bleed smoke
-more += Your shadow no longer tangibly mimics your actions
-more += Your shadow now sometimes tangibly mimics your actions
-# Gozag
-more += will now duplicate a non-artefact item
-# Jiyva
-more += will now unseal the treasures of the Slime Pits
-# Kikubaaqudgha
-more += Kikubaaqudgha will now enhance your necromancy
-# Lugonu
-more += Lugonu will now corrupt your weapon
-# Qazlal
-more += resistances upon receiving elemental damage
-more += You are surrounded by a storm which can block enemy attacks
-# Ru
-more += you are ready to make a new sacrifice
-# Sif Muna
-more += Sif Muna is protecting you from the effects of miscast magic
-# The Shining One
-more += The Shining One will now bless
-# Zin
-more += will now cure all your mutations
-# You Screwed Up
-more += is no longer ready
-
-# Poor Decisions
-more += You really shouldn't be using
-
-# Wrath
-more += Nemelex gives you another card to finish dealing
-more += Fedhas invokes the elements against you
-more += Lugonu sends minions to punish you
-more += Okawaru sends forces against you
-more += wrath finds you
-
-# Xom Effects
-more += staircase.*moves
-more += is too large for the net to hold
-
-# Other
-more += Jiyva alters your body
-: if you.god() == "Xom" then
-	more += god:
-: end
-
-: if not string.find(you.god(), "Jiyva") then
-  more += splits in two
-:end
-
-################
-# Hell Effects #
-################
-
-more += A gut-wrenching scream fills the air
-more += Brimstone rains from above
-more += Die\, mortal
-more += Leave now\, before it is too late
-more += Something frightening happens
-more += Trespassers are not welcome here
-more += We do not forgive those who trespass against us
-more += We have you now
-more += You do not belong in this place
-more += You feel a terrible foreboding
-more += You feel lost and a long\, long way from home
-more += You hear diabolical laughter
-more += You hear words spoken in a strange and terrible language
-more += You sense a hostile presence
-more += You sense an ancient evil watching you
-more += You shiver with fear
-more += You smell brimstone
-more += You suddenly feel all small and vulnerable
-more += You will not leave this place
-
-############
-# Monsters #
-############
-
-# Arriving Unexpectedly
-more += appears in a shower of sparks
-more += appears out of thin air
-more += comes (up|down) the stairs
-more += Something appears in a flash of light
-more += The.*is a mimic
-more += You sense the presence of something unfriendly
-more += The.*answers the.*call
-more += Wisps of shadow swirl around
-more += Shadows whirl around
-
-# Item Use
-more += drinks a potion
-more += evokes.*(amulet|ring)
-more += reads a scroll
-more += zaps a (wand|rod)
-
-# Terrible Monsters
-more += 's ghost.*(comes? into view|opens the)
-more += A player ghost.*(comes? into view|opens the)
-more += boggarts?.*(comes? into view|opens the)
-more += curse skull.*comes? into view
-more += fiend.*(comes? into view|opens the)
-more += flayed ghost.*(comes? into view|opens the)
-more += giant eyeball.*comes? into view
-more += giant orange brains?.*(comes? into view|opens the)
-more += giant spore.*comes? into view
-more += hellion.*(comes? into view|opens the)
-more += ironbrand convoker.*(comes? into view|opens the)
-more += Lich.*(comes? into view|opens the)
-more += orange crystal statue.*comes? into view
-more += shadow demons?.*(comes? into view|opens the)
-more += silver statue.*comes? into view
-more += tormentor.*(comes? into view|opens the)
-
-# Uniques
-more += 27-headed.*(comes? into view|opens the)
-more += Agnes.*(comes? into view|opens the)
-more += Aizul.*(comes? into view|opens the)
-more += Antaeus.*(comes? into view|opens the)
-more += Arachne.*(comes? into view|opens the)
-more += Asmodeus.*(comes? into view|opens the)
-more += Asterion.*(comes? into view|opens the)
-more += Azrael.*(comes? into view|opens the)
-more += Blork the orc.*(comes? into view|opens the)
-more += Boris.*(comes? into view|opens the)
-more += Cerebov.*(comes? into view|opens the)
-more += Crazy Yiuf.*(comes? into view|opens the)
-more += Dispater.*(comes? into view|opens the)
-more += Dissolution.*(comes? into view|opens the)
-more += Donald.*(comes? into view|opens the)
-more += Dowan.*(comes? into view|opens the)
-more += Duvessa.*(comes? into view|opens the)
-more += Edmund.*(comes? into view|opens the)
-more += Ereshkigal.*(comes? into view|opens the)
-more += Erica.*(comes? into view|opens the)
-more += Erolcha.*(comes? into view|opens the)
-more += Eustachio.*(comes? into view|opens the)
-more += Fannar.*(comes? into view|opens the)
-more += Frances.*(comes? into view|opens the)
-more += Francis.*(comes? into view|opens the)
-more += Frederick.*(comes? into view|opens the)
-more += Gastronok.*(comes? into view|opens the)
-more += Geryon.*(comes? into view|opens the)
-more += Gloorx Vloq.*(comes? into view|opens the)
-more += Grinder.*(comes? into view|opens the)
-more += Grum.*(comes? into view|opens the)
-more += Harold.*(comes? into view|opens the)
-more += Ignacio.*(comes? into view|opens the)
-more += Ijyb.*(comes? into view|opens the)
-more += Ilsuiw.*(comes? into view|opens the)
-more += Jessica.*(comes? into view|opens the)
-more += Jorgrun.*(comes? into view|opens the)
-more += Jory.*(comes? into view|opens the)
-more += Joseph.*(comes? into view|opens the)
-more += Josephine.*(comes? into view|opens the)
-more += Jozef.*(comes? into view|opens the)
-more += Khufu.*(comes? into view|opens the)
-more += Kirke.*(comes? into view|opens the)
-more += Lamia.*(comes? into view|opens the)
-more += Lom Lobon.*(comes? into view|opens the)
-more += Louise.*(comes? into view|opens the)
-more += Mara.*(comes? into view|opens the)
-more += Margery.*(comes? into view|opens the)
-more += Maud.*(comes? into view|opens the)
-more += Maurice.*(comes? into view|opens the)
-more += Menkaure.*(comes? into view|opens the)
-more += Mennas.*(comes? into view|opens the)
-more += Mnoleg.*(comes? into view|opens the)
-more += Murray.*(comes? into view|opens the)
-more += Natasha.*(comes? into view|opens the)
-more += Nergalle.*(comes? into view|opens the)
-more += Nessos.*(comes? into view|opens the)
-more += Nikola.*(comes? into view|opens the)
-more += Norris.*(comes? into view|opens the)
-more += Pikel.*(comes? into view|opens the)
-more += Polyphemus.*(comes? into view|opens the)
-more += Prince Ribbit.*(comes? into view|opens the)
-more += Psyche.*(comes? into view|opens the)
-more += Purgy.*(comes? into view|opens the)
-more += Roxanne.*(comes? into view|opens the)
-more += Rupert.*(comes? into view|opens the)
-more += Saint Roka.*(comes? into view|opens the)
-more += Sigmund.*(comes? into view|opens the)
-more += Snorg.*(comes? into view|opens the)
-more += Sojobo.*(comes? into view|opens the)
-more += Sonja.*(comes? into view|opens the)
-more += Terence.*(comes? into view|opens the)
-more += The Lernaean hydra.*(comes? into view|opens the)
-more += The royal jelly.*(comes? into view|opens the)
-more += The Serpent of Hell.*(comes? into view|opens the)
-more += Tiamat.*(comes? into view|opens the)
-more += Urug.*(comes? into view|opens the)
-more += Vashnia.*(comes? into view|opens the)
-more += Wiglaf.*(comes? into view|opens the)
-more += Xtahua.*(comes? into view|opens the)
-
-<
-crawl.mpr('HDAForceMore loaded')
->
-<
- crawl.mpr('HDATravelPre started loading')
->
-confirm_butcher = never
-easy_eat_chunks = true
-auto_eat_chunks = true
-auto_drop_chunks = yes
-easy_eat_contaminated = true
-
-autoinscribe += bread ration:@e1
-autoinscribe += meat ration:@e2
-autoinscribe += chunk:@w0
-autoinscribe += staff of energy:@w1
-
-<
-crawl.mpr('HDAtravelPre loaded')
->
-{
 -- Rests up to at least 75% hp (or missing at least 30hp) and 50% mp (or missing at least 20mp)
 -- Eats chunks automatically, handled by auto_eat_chunks interface option
 -- Travels to the nearest corpse if we have no chunks and are at Very Hungry or Hungry or using Gourmand and at Full
@@ -4837,9 +4820,7 @@ function HDAtravel()
 end
 crawl.mpr('HDAtravel loaded')
 }
-<
-crawl.mpr('HilariousDeathArtist-rc started loading')
->
+:crawl.mpr('HilariousDeathArtist-rc started loading')
 message_colour += mute:you're not good enough to have a special ability
 message_colour += mute:@corpse
 
@@ -4874,7 +4855,7 @@ autofight_stop = 60
 
 # Enables automagic attacks
 automagic_enable = true
-automagic_slot = z
+automagic_slot = a
 # Percentage of MP to stop automagic at
 automagic_stop = 0
 # If set to true, resort to melee when automagic_stop is active
@@ -5436,6 +5417,4 @@ note_messages += You fall through a shaft
 note_messages += [bB]anish.*Abyss
 note_monsters += orb of fire,silver star,pearl dragon,ancient lich
 
-<
-crawl.mpr('rc-file loaded successfully.')
->
+:crawl.mpr('rc-file loaded successfully.')

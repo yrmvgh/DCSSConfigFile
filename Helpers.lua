@@ -16,8 +16,10 @@ end
 function should_rest(hp, mp, max_hp, max_mp)
     local you_are_mummy = string.find(you.race(), "Mummy")
     local you_are_deep_dwarf = string.find(you.race(), "Deep Dwarf")
-    return (mp < (max_mp*0.50) or ((max_mp-mp) > 20)
-        or ((hp < (max_hp*0.80)) or ((max_hp-hp) > 30)
+    --return (mp < (max_mp*0.50) or ((max_mp-mp) > 20)
+        --or ((hp < (max_hp*0.80)) or ((max_hp-hp) > 30)
+    return (mp < max_mp
+        or (hp < max_hp
         and not you_are_deep_dwarf)
         or you.slowed()
         or you.poisoned()

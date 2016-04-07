@@ -1,6 +1,4 @@
-<
-crawl.mpr('HilariousDeathArtist-rc started loading')
->
+:crawl.mpr('HilariousDeathArtist-rc started loading')
 message_colour += mute:you're not good enough to have a special ability
 message_colour += mute:@corpse
 
@@ -35,7 +33,7 @@ autofight_stop = 60
 
 # Enables automagic attacks
 automagic_enable = true
-automagic_slot = z
+automagic_slot = a
 # Percentage of MP to stop automagic at
 automagic_stop = 0
 # If set to true, resort to melee when automagic_stop is active
@@ -597,6 +595,4 @@ note_messages += You fall through a shaft
 note_messages += [bB]anish.*Abyss
 note_monsters += orb of fire,silver star,pearl dragon,ancient lich
 
-<
-crawl.mpr('rc-file loaded successfully.')
->
+:crawl.mpr('rc-file loaded successfully.')

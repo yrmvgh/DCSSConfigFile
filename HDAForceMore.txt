@@ -1,6 +1,4 @@
-<
-crawl.mpr('HDAForceMore started loading')
->
+:crawl.mpr('HDAForceMore started loading')
 #####################
 # Table of Contents #
 #####################
@@ -531,6 +529,4 @@ more += Vashnia.*(comes? into view|opens the)
 more += Wiglaf.*(comes? into view|opens the)
 more += Xtahua.*(comes? into view|opens the)
 
-<
-crawl.mpr('HDAForceMore loaded')
->
+:crawl.mpr('HDAForceMore loaded')

@@ -17,11 +17,8 @@ note_chat_messages = true
 
 <
   function ready()
-    crawl.mpr('announce')
     AnnounceDamage()
-    crawl.mpr('spoiler')
     SpoilerAlert()
-    crawl.mpr('openskills')
     OpenSkills()
   end
 >

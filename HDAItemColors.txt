@@ -1,6 +1,5 @@
-<
-crawl.mpr('Starting to load HDAItemColors')
->
+:crawl.mpr('Starting to load HDAItemColors')
+
 #########################
 # Aliases and Variables #
 #########################
@@ -142,6 +141,4 @@ menu += $awesome:.*misc.*rune( of Zot)?
 menu += $awesome:.*orb.*Zot
 menu += $awesome:manual
 
-<
-crawl.mpr('HDAItemColors loaded')
->
+:crawl.mpr('HDAItemColors loaded')

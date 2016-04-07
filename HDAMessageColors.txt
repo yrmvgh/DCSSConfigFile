@@ -1,6 +1,4 @@
-<
-crawl.mpr('Starting to load HDAMessageColors')
->
+:crawl.mpr('HDAMessageColors started to load')
 ####################
 # Message coloring #
 ####################
@@ -10,6 +8,7 @@ crawl.mpr('Starting to load HDAMessageColors')
 # lightgrey, lightmagenta, lightred, magenta, red, yellow, white
 
 # Variables for message highlighting
+
 $danger   := lightred
 $item_dmg := red
 $warning  := yellow
@@ -2700,6 +2699,4 @@ msc += boring:trembles before you
 msc += boring:You feel mildly nauseous
 msc += boring:Multicoloured lights dance around
 
-<
-crawl.mpr('HDAMessageColors loaded')
->
+:crawl.mpr('HDAMessageColors loaded')
