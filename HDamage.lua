@@ -129,4 +129,3 @@ function AnnounceDamage()
     previous_form = current_form
     was_berserk_last_turn = you_are_berserk
 end
-crawl.mpr('HDamage loaded')

@@ -166,4 +166,3 @@ function HDAtravel()
         autoexplore()
     end
 end
-crawl.mpr('HDAtravel loaded')

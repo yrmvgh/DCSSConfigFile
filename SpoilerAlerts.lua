@@ -752,4 +752,3 @@ function SpoilerAlert()
         end
     end
 end
-crawl.mpr('SpoilerAlerts loaded')

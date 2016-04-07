@@ -22,7 +22,6 @@ note_chat_messages = true
     OpenSkills()
   end
 >
-:crawl.mpr('HDAForceMore started loading')
 #####################
 # Table of Contents #
 #####################
@@ -552,10 +551,6 @@ more += Urug.*(comes? into view|opens the)
 more += Vashnia.*(comes? into view|opens the)
 more += Wiglaf.*(comes? into view|opens the)
 more += Xtahua.*(comes? into view|opens the)
-
-:crawl.mpr('HDAForceMore loaded')
-:crawl.mpr('HDATravelPre started loading')
-
 confirm_butcher = never
 easy_eat_chunks = true
 auto_eat_chunks = true
@@ -566,9 +561,6 @@ autoinscribe += bread ration:@e1
 autoinscribe += meat ration:@e2
 autoinscribe += chunk:@w0
 autoinscribe += staff of energy:@w1
-
-:crawl.mpr('HDAtravelPre loaded')
-:crawl.mpr('HDAMessageColors started to load')
 ####################
 # Message coloring #
 ####################
@@ -3268,10 +3260,6 @@ msc ^= boring:stares at you suspiciously for a moment
 msc += boring:trembles before you
 msc += boring:You feel mildly nauseous
 msc += boring:Multicoloured lights dance around
-
-:crawl.mpr('HDAMessageColors loaded')
-:crawl.mpr('Starting to load HDAItemColors')
-
 #########################
 # Aliases and Variables #
 #########################
@@ -3412,8 +3400,6 @@ menu += $good:throwing net
 menu += $awesome:.*misc.*rune( of Zot)?
 menu += $awesome:.*orb.*Zot
 menu += $awesome:manual
-
-:crawl.mpr('HDAItemColors loaded')
 {
 --Escapes the special characters in a string for pattern matching
 function escape(str)
@@ -3762,7 +3748,6 @@ local function init_spells()
 end
 
 known_spells = init_spells()
-crawl.mpr('Helpers loaded')
 -- Uses the getMonsterList and escape functions above
 function SpoilerAlert()
     local mobwarnings = {}
@@ -4517,7 +4502,6 @@ function SpoilerAlert()
         end
     end
 end
-crawl.mpr('SpoilerAlerts loaded')
 local previous_hp = 0
 local previous_mp = 0
 local previous_form = ""
@@ -4649,7 +4633,6 @@ function AnnounceDamage()
     previous_form = current_form
     was_berserk_last_turn = you_are_berserk
 end
-crawl.mpr('HDamage loaded')
 -- Rests up to 100% hp and 100% mp
 -- Eats chunks automatically, handled by auto_eat_chunks interface option
 -- Travels to the nearest corpse if we have no chunks and are at Very Hungry or Hungry or using Gourmand and at Full
@@ -4818,9 +4801,7 @@ function HDAtravel()
         autoexplore()
     end
 end
-crawl.mpr('HDAtravel loaded')
 }
-:crawl.mpr('HilariousDeathArtist-rc started loading')
 message_colour += mute:you're not good enough to have a special ability
 message_colour += mute:@corpse
 
@@ -5416,5 +5397,3 @@ note_messages += protects you from harm
 note_messages += You fall through a shaft
 note_messages += [bB]anish.*Abyss
 note_monsters += orb of fire,silver star,pearl dragon,ancient lich
-
-:crawl.mpr('rc-file loaded successfully.')

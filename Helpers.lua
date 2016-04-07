@@ -345,4 +345,3 @@ local function init_spells()
 end
 
 known_spells = init_spells()
-crawl.mpr('Helpers loaded')

@@ -1,4 +1,3 @@
-:crawl.mpr('HilariousDeathArtist-rc started loading')
 message_colour += mute:you're not good enough to have a special ability
 message_colour += mute:@corpse
 
@@ -594,5 +593,3 @@ note_messages += protects you from harm
 note_messages += You fall through a shaft
 note_messages += [bB]anish.*Abyss
 note_monsters += orb of fire,silver star,pearl dragon,ancient lich
-
-:crawl.mpr('rc-file loaded successfully.')
