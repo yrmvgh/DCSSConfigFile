@@ -4650,7 +4650,7 @@ function AnnounceDamage()
     was_berserk_last_turn = you_are_berserk
 end
 crawl.mpr('HDamage loaded')
--- Rests up to at least 75% hp (or missing at least 30hp) and 50% mp (or missing at least 20mp)
+-- Rests up to 100% hp and 100% mp
 -- Eats chunks automatically, handled by auto_eat_chunks interface option
 -- Travels to the nearest corpse if we have no chunks and are at Very Hungry or Hungry or using Gourmand and at Full
 -- Automatically chops valid corpses if we are standing on them and we have no chunks
@@ -4772,7 +4772,7 @@ function HDAtravel()
         elseif you_want_chunks and (not (you_are_zin or need_to_recover or on_chunks() or on_corpses() or already_checked)) then
             crawl.mpr("<yellow>You may need something to eat soon, looking for food.</yellow>")
             find_corpses()
-        elseif you_are_starving_or_near() and (number_of_chunks == 0) and (not (on_chunks() or on_corpses())) then
+        elseif you_are_starving_or_near() and (number_of_chunks() == 0) and (not (on_chunks() or on_corpses())) then
             local have_bread = is_in_inventory("bread ration")
             local have_meat = is_in_inventory("meat ration")
             if have_bread or have_meat then
