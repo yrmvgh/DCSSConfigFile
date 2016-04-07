@@ -76,6 +76,10 @@ function already_animated()
     return string.find(crawl.messages(20), escape("Autocasting Animate Dead"))
 end
 
+function already_protected_from_missiles()
+    return string.find(you.status(), escape("missiles"))
+end
+
 function removed_barbs()
     return string.find(crawl.messages(10), escape("You carefully extract the manticore spikes from your body"))
         or string.find(crawl.messages(10), escape("The manticore spikes snap loose"))
@@ -249,7 +253,7 @@ function find_corpses()
     if string.find(god, "Shining") then
         exlude_this = race
     end
-    sendkeys(string.char(6) .. "@corpse&&!!rott&&!!skel&&!!sky&&!!necrop&&!!ugly&&!!vampire&&!!corpse rot&&!!&&!!botono" .. exclude_this .. "\ra\r")
+    sendkeys(string.char(6) .. "@corpse&&!!rott&&!!skel&&!!sky&&!!necrop&&!!ugly&&!!vampire&&!!corpse rot&&!!botono" .. exclude_this .. "\ra\r")
 end
 
 function inventory()

@@ -3479,6 +3479,10 @@ function already_animated()
     return string.find(crawl.messages(20), escape("Autocasting Animate Dead"))
 end
 
+function already_protected_from_missiles()
+    return string.find(you.status(), escape("missiles"))
+end
+
 function removed_barbs()
     return string.find(crawl.messages(10), escape("You carefully extract the manticore spikes from your body"))
         or string.find(crawl.messages(10), escape("The manticore spikes snap loose"))
@@ -3652,7 +3656,7 @@ function find_corpses()
     if string.find(god, "Shining") then
         exlude_this = race
     end
-    sendkeys(string.char(6) .. "@corpse&&!!rott&&!!skel&&!!sky&&!!necrop&&!!ugly&&!!vampire&&!!corpse rot&&!!&&!!botono" .. exclude_this .. "\ra\r")
+    sendkeys(string.char(6) .. "@corpse&&!!rott&&!!skel&&!!sky&&!!necrop&&!!ugly&&!!vampire&&!!corpse rot&&!!botono" .. exclude_this .. "\ra\r")
 end
 
 function inventory()
@@ -4692,6 +4696,8 @@ function HDAtravel()
     local no_food_issues = (you_are_hungerless or have_spare_chunks)
     local should_channel_mp = ((max_mp - mp) > 5) and no_food_issues
     local can_cast_regen = known_spells["Regeneration"] and (mp>3) and (spells.fail("Regeneration") < 20)
+    local can_cast_repel_missiles = known_spells["Repel Missiles"] and (mp>2) and (spells.fail("Repel Missiles") < 30)
+    local can_cast_deflect_missiles = known_spells["Deflect Missiles"] and (mp>6) and (spells.fail("Deflect Missiles") < 30)
     local you_have_regen_ring = is_in_inventory("regeneration")
     local regen_ring_letter = find_item_letter("regeneration")
     local regen_ring_is_equipped = is_ring("regeneration")
@@ -4713,6 +4719,12 @@ function HDAtravel()
     --crawl.mpr(string.format("you_want_spare_chunks is: %s", you_want_spare_chunks and "True" or "False"))
     --crawl.mpr(string.format("you_are_hungerless is: %s", you_are_hungerless and "True" or "False"))
     --crawl.mpr(string.format("have_no_chunks is: %s", have_no_chunks and "True" or "False"))
+    --crawl.mpr(string.format("you.status(): %s", you.status()))
+    --crawl.mpr(string.format("known_spells[\"Repel Missiles\"]: %s", known_spells["Repel Missiles"] and "True" or "False"))
+    --crawl.mpr(string.format("mp: %s", mp))
+    --crawl.mpr(string.format("spells.fail(\"Repel Missiles\"): %s", spells.fail("Repel Missiles")))
+    --crawl.mpr(string.format("can_cast_repel_missiles is: %s", can_cast_repel_missiles and "True" or "False"))
+    --crawl.mpr(string.format("already_protected_from_missiles() is: %s", already_protected_from_missiles() and "True" or "False"))
     if (is_safe) then
         if you_are_barbed then
             rest()
@@ -4792,6 +4804,12 @@ function HDAtravel()
         elseif you_are_yred and (you.piety_rank() >= 1) and on_corpses() then
             crawl.mpr("<cyan>Autocasting Animate Remains.</cyan>")
             sendkeys('aa')
+        elseif can_cast_deflect_missiles and not already_protected_from_missiles() then
+          crawl.mpr("<cyan>Autocasting Deflect Missiles.</cyan>")
+          sendkeys('zd')
+        elseif can_cast_repel_missiles and not already_protected_from_missiles() then
+          crawl.mpr("<cyan>Autocasting Repel Missiles.</cyan>")
+          sendkeys('zd')
         else
             --This does the general travelling
             autoexplore()
