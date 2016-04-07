@@ -1,10 +1,13 @@
+<
+crawl.mpr('HilariousDeathArtist-rc started loading')
+>
 message_colour += mute:you're not good enough to have a special ability
 message_colour += mute:@corpse
 
 ####################
 # Opens skill menu #
 ####################
-<
+{
   local need_skills_opened = true
   function OpenSkills()
     if you.turns() == 0 and need_skills_opened then
@@ -12,7 +15,7 @@ message_colour += mute:@corpse
       sendkeys("m")
     end
   end
->
+}
 
 #############
 # Autofight #

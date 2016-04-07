@@ -1,3 +1,6 @@
+<
+crawl.mpr('Starting to load HDAItemColors')
+>
 #########################
 # Aliases and Variables #
 #########################
@@ -60,7 +63,7 @@ menu += $good:deck of war
 menu += $positive:deck of (defence|summoning)
 menu += $verypositive:deck of escape
 menu += $awesome:deck of wonders
-menu += $warning:deck of 
+menu += $warning:deck of
 
 # Evokables
 menu += blue:inert
@@ -138,3 +141,7 @@ menu += $good:throwing net
 menu += $awesome:.*misc.*rune( of Zot)?
 menu += $awesome:.*orb.*Zot
 menu += $awesome:manual
+
+<
+crawl.mpr('HDAItemColors loaded')
+>

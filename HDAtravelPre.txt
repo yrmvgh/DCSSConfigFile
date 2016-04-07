@@ -1,3 +1,6 @@
+<
+ crawl.mpr('HDATravelPre started loading')
+>
 confirm_butcher = never
 easy_eat_chunks = true
 auto_eat_chunks = true
@@ -8,3 +11,7 @@ autoinscribe += bread ration:@e1
 autoinscribe += meat ration:@e2
 autoinscribe += chunk:@w0
 autoinscribe += staff of energy:@w1
+
+<
+crawl.mpr('HDAtravelPre loaded')
+>

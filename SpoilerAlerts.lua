@@ -1,31 +1,3 @@
---Returns a table where the key is the monster description and value is the total number of that mob in your vision
-function getMonsterList()
-    local monsters = {}
-    for x = -8,8 do
-        for y = -8,8 do
-            m = monster.get_monster_at(x, y)
-            local attitude_hostile = 0
-            if m and (m:attitude() == attitude_hostile) and not (m:is_firewood()) then
-                desc = m:desc()
-                if (monsters[desc] == nil) then
-                    monsters[desc] = 1
-                else
-                    monsters[desc] = monsters[desc] + 1
-                end
-            end
-        end
-    end
-    return monsters
-end
-
---Escapes the special characters in a string for pattern matching
-function escape(str)
-    --Escapes parens and dash "()-"
-    local escaped = str:gsub('[%(%)%-]','\\%1')
-    --Removes any coloration parts of the string
-    return (escaped:gsub('<[^<]*>',''))
-end
-
 -- Uses the getMonsterList and escape functions above
 function SpoilerAlert()
     local mobwarnings = {}
@@ -780,3 +752,4 @@ function SpoilerAlert()
         end
     end
 end
+crawl.mpr('SpoilerAlerts loaded')
