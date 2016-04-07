@@ -1,0 +1,27 @@
+# Got suggestions/improvements?
+# https://github.com/HilariousDeathArtist/DCSSConfigFile
+# or find me on crawl.s-z.org
+
+# I will try to keep my rc files up to date on CSZO and CAO
+# If you are playing on these servers you can include this file in your config with the following line
+# include += HilariousDeathArtist.rc
+
+# SUCH EXCITEMENT!!!
+# language = !!!
+# To override this setting, add the following line after include += HilariousDeathArtist.rc
+# language = en
+# To override other settings you don't like, you may redefine them after the include like the language setting
+
+# Logs chat messages into the notes
+note_chat_messages = true
+
+<
+  function ready()
+    crawl.mpr('announce')
+    AnnounceDamage()
+    crawl.mpr('spoiler')
+    SpoilerAlert()
+    crawl.mpr('openskills')
+    OpenSkills()
+  end
+>

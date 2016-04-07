@@ -1,0 +1,10 @@
+confirm_butcher = never
+easy_eat_chunks = true
+auto_eat_chunks = true
+auto_drop_chunks = yes
+easy_eat_contaminated = true
+
+autoinscribe += bread ration:@e1
+autoinscribe += meat ration:@e2
+autoinscribe += chunk:@w0
+autoinscribe += staff of energy:@w1

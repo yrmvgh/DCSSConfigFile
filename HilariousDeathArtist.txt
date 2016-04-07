@@ -1,53 +1,3 @@
-# Got suggestions/improvements?
-# https://github.com/HilariousDeathArtist/DCSSConfigFile
-# or find me on crawl.s-z.org
-
-# I will try to keep my rc files up to date on CSZO and CAO
-# If you are playing on these servers you can include this file in your config with the following line
-# include += HilariousDeathArtist.rc
-
-# SUCH EXCITEMENT!!!
-# language = !!!
-# To override this setting, add the following line after include += HilariousDeathArtist.rc
-# language = en
-# To override other settings you don't like, you may redefine them after the include like the language setting
-
-# Logs chat messages into the notes
-note_chat_messages = true
-
-<
-  function ready()
-    AnnounceDamage()
-    --SpoilerAlert()
-    OpenSkills()
-  end
->
-
-####################
-# Included RcFiles #
-####################
-
-# Just Message colors
-# include += HDAMessageColors.rc
-
-# Just Item colors
-# include += HDAItemColors.rc
-
-# Monster warning messages -- disabled by default
-# Uncomment the next line and the call to SpoilerAlert() in the ready function to use it
-# include += SpoilerAlert.rc
-
-# The damage announcement messages
-include += HDamage.rc
-
-# Force More prompts
-include += HDAForceMore.rc
-
-# Message and Item colors
-include += HDAColors.rc
-
-# The ===HDAtravel autotravel replacement macro
-include += HDAtravel.rc
 message_colour += mute:you're not good enough to have a special ability
 message_colour += mute:@corpse
 
@@ -81,10 +31,10 @@ fire_order += rock, javelin, tomahawk, stone
 autofight_stop = 60
 
 # Enables automagic attacks
-automagic_enable = false
-automagic_slot = a
+automagic_enable = true
+automagic_slot = z
 # Percentage of MP to stop automagic at
-automagic_stop = 50
+automagic_stop = 0
 # If set to true, resort to melee when automagic_stop is active
 automagic_fight = true
 
@@ -137,20 +87,20 @@ ae += <artefact
 # Armour/Weapon autopickup by rwbarton, enhanced by HDA with fixes from Bloaxor
 {
 add_autopickup_func(function(it, name)
-  
+
   if name:find("curare") then return true end
   if name:find("dispersal") and (name:find("dart") or name:find("tomahawk")) then return true end
   if name:find("throwing net") then return true end
- 
+
   local class = it.class(true)
   local armour_slots = {cloak="Cloak", helmet="Helmet", gloves="Gloves", boots="Boots", body="Armour", shield="Shield"}
 
   if (class == "armour") then
 		if it.is_useless then return false end
-		
+
     sub_type = it.subtype()
     equipped_item = items.equipped_at(armour_slots[sub_type])
- 
+
     if (sub_type == "cloak") or (sub_type == "helmet") or (sub_type == "gloves") or (sub_type == "boots") then
       if not equipped_item then
         return true
@@ -158,7 +108,7 @@ add_autopickup_func(function(it, name)
         return it.artefact or it.branded or it.ego
       end
     end
- 
+
     if (sub_type == "body") then
       if equipped_item then
         local armourname = equipped_item.name()
@@ -170,17 +120,17 @@ add_autopickup_func(function(it, name)
       end
       return true
     end
- 
+
     if (sub_type == "shield") then
       if equipped_item then
           return it.artefact or it.branded or it.ego
       end
     end
   end
- 
+
   if (class == "weapon") then
 		if it.is_useless then return false end
-		
+
     if (you.xl() < 12) or (you.god():find("Nemelex")
                            or (you.god():find("Yred"))
                            or (you.god():find("Beogh"))) then
@@ -497,7 +447,7 @@ ai := autoinscribe
 # Inscribe potions of blood if you are a vampire
 : else
   ai += potion.*blood:@q1
-: end 
+: end
 
 # Inscribe distortion weapons if you are not worshipping Lugonu
 : if you.god() ~= "Lugonu" then
@@ -643,3 +593,7 @@ note_messages += protects you from harm
 note_messages += You fall through a shaft
 note_messages += [bB]anish.*Abyss
 note_monsters += orb of fire,silver star,pearl dragon,ancient lich
+
+<
+crawl.mpr('rc-file loaded successfully.')
+>
