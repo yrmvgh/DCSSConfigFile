@@ -8,6 +8,7 @@
 -- TODO: better detection of non-edible corpses before standing on them
 -- TODO: Fix up for Vampire, Ghoul, and possibly Spriggan/Mummy
 -- NOTE: If you don't have rP you will still chop poisonous corpses, but not pick up their chunks
+local previous_god = you.god()
 
 function HDAtravel()
     local mp, max_mp = you.mp()
@@ -86,6 +87,17 @@ function HDAtravel()
     --crawl.mpr(string.format("spells.fail(\"Repel Missiles\"): %s", spells.fail("Repel Missiles")))
     --crawl.mpr(string.format("can_cast_repel_missiles is: %s", can_cast_repel_missiles and "True" or "False"))
     --crawl.mpr(string.format("already_protected_from_missiles() is: %s", already_protected_from_missiles() and "True" or "False"))
+    if you.god() == "Fedhas" and previous_god ~= you.god() then
+        for item in inventory() do
+            if item.subtype() == "fruit" then
+                if not string.find(item.name(), "!e") then
+                    crawl.mpr("<cyan>Autoinscribing fruits.</cyan>")
+                    sendkeys("{" .. items.index_to_letter(item.slot) .. "!e\r")
+                end
+            end
+        end
+        previous_god = you.god()
+    end
     if (is_safe) then
         if you_are_barbed then
             rest()
@@ -166,11 +178,11 @@ function HDAtravel()
             crawl.mpr("<cyan>Autocasting Animate Remains.</cyan>")
             sendkeys('aa')
         elseif can_cast_deflect_missiles and not already_protected_from_missiles() then
-          crawl.mpr("<cyan>Autocasting Deflect Missiles.</cyan>")
-          sendkeys('zd')
+            crawl.mpr("<cyan>Autocasting Deflect Missiles.</cyan>")
+            sendkeys('zd')
         elseif can_cast_repel_missiles and not already_protected_from_missiles() then
-          crawl.mpr("<cyan>Autocasting Repel Missiles.</cyan>")
-          sendkeys('zd')
+            crawl.mpr("<cyan>Autocasting Repel Missiles.</cyan>")
+            sendkeys('zd')
         else
             --This does the general travelling
             autoexplore()
