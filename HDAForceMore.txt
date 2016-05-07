@@ -10,6 +10,8 @@
 # 6. Religion
 # 7. Hell Effects
 # 8. Monsters
+# 9. Skills
+# 10. Distortion
 
 # Set Alias
 more := force_more_message
@@ -39,21 +41,11 @@ more += The drain falls to bits
 more += There is an entrance to a bailey on this level
 more += tolling of a bell
 more += wave of frost
-more += You hear the drain falling apart
-more += You hear.*crackle.*magical portal
-more += You hear.*crackling.*archway
-more += You hear.*creaking.*(oriflamme|portcullis)
-more += You hear.*hiss.*sand
-more += You hear.*rumble.*avalanche
-more += You hear.*rusting.*drain
-more += You hear.*ticking.*clock
 
 # Traps
 more += (blundered into a|invokes the power of) Zot
 more += A huge blade swings out and slices into you
-stop += An alarm trap emits a blaring wail
-stop += found a zot trap
-stop += hear a soft click
+more += An alarm trap emits a blaring wail
 more += The power of Zot is invoked against you
 more += You (become entangled|are caught) in (a|the) (web|net)
 more += You fall through a shaft
@@ -145,15 +137,12 @@ more += You are trampled
 more += You convulse
 more += You feel a (horrible|terrible) chill
 more += You feel haunted
-more += You feel less vulnerable to poison
-more += You feel your attacks grow feeble
 more += You feel your flesh.*rot
 more += You feel your power drain away
 more += You feel your power leaking away
-more += You feel yourself grow more vulnerable to poison
 more += You stumble backwards
 more += You.*re (confused|more confused|too confused)
-more += You.*re (poisoned|more poisoned|lethally poisoned)
+more += You.*re lethally poisoned
 more += Your body is wracked with pain
 more += Your damage is reflected back at you
 more += Your limbs are stiffening
@@ -165,7 +154,6 @@ more += A tree reaches out and hits you!
 more += Agitated ravens fly out from beneath the
 more += begins to recite a word of recall
 more += Being near the torpor snail leaves you feeling lethargic
-more += blows on a signal horn
 more += cast banishment
 more += cast paralyse
 more += cast Torment
@@ -195,6 +183,7 @@ more += You are hit by a branch
 more += You feel you are being watched by something
 more += Your magical defenses are stripped away
 more += \'s.*reflects
+more += Something.*(hits|misses) you(?!r)
 
 # Unexpected situations
 more += A magical barricade bars your way
@@ -219,7 +208,6 @@ more += You have disarmed
 more += You have finished your manual
 more += You have reached level
 more += You need to eat something NOW
-more += You smell decay. (^Yuck!)
 more += You stop (a|de)scending the stairs
 more += You turn into a fleshy mushroom
 more += Your body shudders with the violent release of wild energies
@@ -238,12 +226,6 @@ more += You.*and break free
 more += Your fit of retching subsides
 more += seems mollified
 
-# Ghouls
-: if you.race() == "Ghoul" then
-	stop += smell.*(rott(ing|en)|decay)
-	stop += something tasty in your inventory
-: end
-
 ##################
 # Translocations #
 ##################
@@ -256,13 +238,12 @@ more += You feel your translocation being delayed
 more += Your surroundings flicker
 more += Your surroundings seem slightly different
 more += Your surroundings suddenly seem different
+
 # -Tele
 more += You cannot blink right now
 more += You cannot teleport right now
 more += You feel.*firmly anchored in space
 more += You are no longer firmly anchored in space
-# -cTele
-more += You feel your control is inadequate
 
 ####################
 # Expiring Effects #
@@ -280,8 +261,6 @@ more += dark mirror aura disappears
 # Player Spells
 # Aura of Abjuration
 stop += Your aura of abjuration expires
-# Control Teleport
-stop += you feel uncertain
 # Death's Door
 more += time is quickly running out
 more += life is in your own
@@ -376,7 +355,7 @@ more += is too large for the net to hold
 # Other
 more += Jiyva alters your body
 : if you.god() == "Xom" then
-	more += god:
+    more += god:
 : end
 
 : if not string.find(you.god(), "Jiyva") then
@@ -428,24 +407,6 @@ more += evokes.*(amulet|ring)
 more += reads a scroll
 more += zaps a (wand|rod)
 
-# Terrible Monsters
-more += 's ghost.*(comes? into view|opens the)
-more += A player ghost.*(comes? into view|opens the)
-more += boggarts?.*(comes? into view|opens the)
-more += curse skull.*comes? into view
-more += fiend.*(comes? into view|opens the)
-more += flayed ghost.*(comes? into view|opens the)
-more += giant eyeball.*comes? into view
-more += giant orange brains?.*(comes? into view|opens the)
-more += giant spore.*comes? into view
-more += hellion.*(comes? into view|opens the)
-more += ironbrand convoker.*(comes? into view|opens the)
-more += Lich.*(comes? into view|opens the)
-more += orange crystal statue.*comes? into view
-more += shadow demons?.*(comes? into view|opens the)
-more += silver statue.*comes? into view
-more += tormentor.*(comes? into view|opens the)
-
 # Uniques
 more += 27-headed.*(comes? into view|opens the)
 more += Agnes.*(comes? into view|opens the)
@@ -465,6 +426,7 @@ more += Donald.*(comes? into view|opens the)
 more += Dowan.*(comes? into view|opens the)
 more += Duvessa.*(comes? into view|opens the)
 more += Edmund.*(comes? into view|opens the)
+more += Enchantress.*(comes? into view|opens the)
 more += Ereshkigal.*(comes? into view|opens the)
 more += Erica.*(comes? into view|opens the)
 more += Erolcha.*(comes? into view|opens the)
@@ -482,9 +444,9 @@ more += Harold.*(comes? into view|opens the)
 more += Ignacio.*(comes? into view|opens the)
 more += Ijyb.*(comes? into view|opens the)
 more += Ilsuiw.*(comes? into view|opens the)
-more += Jessica.*(comes? into view|opens the)
 more += Jorgrun.*(comes? into view|opens the)
 more += Jory.*(comes? into view|opens the)
+more += Jessica.*(comes? into view|opens the)
 more += Joseph.*(comes? into view|opens the)
 more += Josephine.*(comes? into view|opens the)
 more += Jozef.*(comes? into view|opens the)
@@ -511,6 +473,7 @@ more += Polyphemus.*(comes? into view|opens the)
 more += Prince Ribbit.*(comes? into view|opens the)
 more += Psyche.*(comes? into view|opens the)
 more += Purgy.*(comes? into view|opens the)
+more += Robin.*(comes? into view|opens the)
 more += Roxanne.*(comes? into view|opens the)
 more += Rupert.*(comes? into view|opens the)
 more += Saint Roka.*(comes? into view|opens the)
@@ -527,3 +490,75 @@ more += Urug.*(comes? into view|opens the)
 more += Vashnia.*(comes? into view|opens the)
 more += Wiglaf.*(comes? into view|opens the)
 more += Xtahua.*(comes? into view|opens the)
+
+# Malmutate enemies
+more += .*Shining Eye.*(comes? into view|opens the)
+more += .*Neqoxec.*(comes? into view|opens the)
+more += .*Cacodemon.*(comes? into view|opens the)
+more += .*wretched star.*comes? into view
+more += .*Orbs? of Fire.*(comes? into view|opens the)
+
+# Misc dangerous enemies
+more += .*player ghost.* comes? into view
+more += .*Hellion.*(comes? into view|opens the)
+more += .*Hell Sentinel.*(comes? into view|opens the)
+more += .*shrikes? (?!zombie|skeleton).*(comes? into view|opens the)
+more += .*spark wasps? (?!zombie|skeleton).*(comes? into view|opens the)
+more += .*juggernaut.*(comes? into view|opens the)
+more += .*Executioner.*(comes? into view|opens the)
+more += .*('s|s') ghost.*(comes? into view|opens the)
+more += .*Deep elf demonologist.*(comes? into view|opens the)
+
+# Torment enemies
+more += .*Fiend.*(comes? into view|opens the)
+more += .*lurking horror.*comes? into view
+more += .*Tormentor.*(comes? into view|opens the)
+more += .*Greater Mumm.*(comes? into view|opens the)
+more += .*Mummy Priest.*(comes? into view|opens the)
+more += .*Curse Toe.*(comes? into view|opens the)
+more += .*Curse Skull.*(comes? into view|opens the)
+
+# Paralysis enemies
+more += .*Ancient Lich.*(comes? into view|opens the)
+more += .*Lich.*(comes? into view|opens the)
+more += .*Giant Eyeball.*(comes? into view|opens the)
+more += .*Ogre Mage.*(comes? into view|opens the)
+more += .*a Wizard.*(comes? into view|opens the)
+more += .*orc sorcerer.*(comes? into view|opens the)
+more += .*sphinx.*(comes? into view|opens the)
+more += .*Great orbs? of eyes.*(comes? into view|opens the)
+more += .*Vampire knight.*(comes? into view|opens the)
+
+# Low level baddies
+: if you.xl() <= 10 then
+more += .*Orc wizard.*(comes? into view|opens the)
+more += .*Orc priest.*(comes? into view|opens the)
+more += .*Orc warrior.*(comes? into view|opens the)
+more += .*Wyvern.*(comes? into view|opens the)
+more += .*Killer bees? (?!zombie|skeleton).*(comes? into view|opens the)
+more += .*Ogre.*(comes? into view|opens the)
+more += .*centaurs? (?!zombie|skeleton).*(comes? into view|opens the)
+more += .*is wielding.*of (electrocution|draining)
+: end
+
+##########
+# Skills #
+##########
+
+more += Your Shields skill increases to level (4|6|9|15|21|25)
+more += Your Short Blades skill increases to level (10|12|14)
+more += Your Long Blades skill increases to level (14|16|18|24)
+more += Your Maces & Flails skill increases to level (12|16|20|22)
+more += Your Axes skill increases to level (16|18|20|26)
+more += Your Polearms skill increases to level (14|16|20|26)
+more += Your Staves skill increases to level (12|14)
+more += Your Evocations skill increases to level (6|10|15)
+more += Your Invocations skill increases to level (6|10)
+
+##############
+# Distortion #
+##############
+
+more += hits you.*(distortion|chaos)
+more += warns you.*of (distortion|chaos)
+more += is wielding.*of (distortion|chaos)
